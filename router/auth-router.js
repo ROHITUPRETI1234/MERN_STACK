@@ -1,11 +1,9 @@
 const express = require("express");
 const router = express();
+// const { home, register } = require("../controllers/auth-controller.js");
+const authControllers = require("../controllers/auth-controller.js");
 
-router.get("/", (req, res) => {
-  res.status(200).send("Full Stack Again");
-});
+router.route("/").get(authControllers.home);
+router.route("/register").get(authControllers.register);
 
-router.route("/").get((req, res) => {
-  res.status(200).send("Full Stack Again");
-});
 module.exports = router;
