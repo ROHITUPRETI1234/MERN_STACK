@@ -1,6 +1,5 @@
 const { body, validationResult } = require("express-validator");
 const User = require("../models/user-model.js");
-const bcrypt = require("bcrypt");
 
 const home = async (req, res) => {
   try {
@@ -47,17 +46,18 @@ const register = [
         return res.status(400).json({ msg: "User already exists" });
       }
 
-      const saltRound = 10;
-      const hashPassword = await bcrypt.hash(password, saltRound);
       const userCreate = await User.create({
         username,
         email,
         phone,
-        password: hashPassword,
+        password,
       });
-      res
-        .status(201)
-        .json({ msg: "User created successfully", user: userCreate });
+      res.status(201).json({
+        msg: "User created successfully",
+        // user: userCreate,
+        token: await userCreate.generateToken(), //instance method defined in userSchema
+        userId: userCreate._id.toString(),
+      });
     } catch (error) {
       res
         .status(500)
