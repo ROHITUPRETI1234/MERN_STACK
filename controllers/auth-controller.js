@@ -1,5 +1,6 @@
 const { body, validationResult } = require("express-validator");
 const User = require("../models/user-model.js");
+const bcrypt = require("bcrypt");
 
 const home = async (req, res) => {
   try {
@@ -9,7 +10,7 @@ const home = async (req, res) => {
   }
 };
 
-//express-validator used for checking validation logic
+// Express-validator used for checking validation logic
 const register = [
   // Validation rules
   body("username").notEmpty().withMessage("Username is required"),
@@ -54,8 +55,7 @@ const register = [
       });
       res.status(201).json({
         msg: "User created successfully",
-        // user: userCreate,
-        token: await userCreate.generateToken(), //instance method defined in userSchema
+        token: await userCreate.generateToken(), // instance method defined in userSchema
         userId: userCreate._id.toString(),
       });
     } catch (error) {
@@ -66,4 +66,43 @@ const register = [
   },
 ];
 
-module.exports = { home, register };
+const login = [
+  body("email").isEmail().withMessage("email must be valid email address"),
+  body("password")
+    .isLength({ min: 6 })
+    .withMessage("Password is required of min. length 6"),
+  async (req, res) => {
+    // Check for validation errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+      const { email, password } = req.body;
+
+      const userExist = await User.findOne({ email });
+      if (!userExist) {
+        return res.status(401).json({ msg: "Invalid credentials" });
+      }
+
+      const isMatch = await bcrypt.compare(password, userExist.password);
+      // const isMatch=await userExist.comparePassword();
+      if (!isMatch) {
+        return res.status(401).json({ msg: "Email or password incorrect" });
+      }
+
+      res.status(200).json({
+        msg: "User login successfully",
+        token: await userExist.generateToken(),
+        userId: userExist._id.toString(),
+      });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ msg: "Internal Server Error", error: error.message });
+    }
+  },
+];
+
+module.exports = { home, register, login };
