@@ -2,12 +2,22 @@ const Contact = require("../models/contact-model.js");
 
 const contactForm = async (req, res, next) => {
   try {
-    const response = req.body;
-    console.log(req.body);
-    await Contact.create(response);
+    const { username, email, message } = req.body;
+
+    const contactExist = await Contact.findOne({ email });
+    if (contactExist) {
+      return res
+        .status(400)
+        .json({ msg: "Contact with this email already exists" });
+    }
+    await Contact.create({
+      username,
+      email,
+      message,
+    });
     return res
       .status(201)
-      .json({ msg: "Form is filled successfully(msg sended)" });
+      .json({ msg: "Form is filled successfully (message sent)" });
   } catch (error) {
     const message = "Failed to save contact form data.";
     const err = { status: 500, message, extraDetails: error.message };
