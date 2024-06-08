@@ -15,12 +15,12 @@ const contactValidationSchema = z.object({
   message: z
     .string({ required_error: "Message is required" })
     .min(10, { message: "Message must be at least 10 characters" })
+    .max(1000, { message: "Message is too big. write in short." })
     .regex(/^(?!.*<script>).+$/i, {
       message: "Message contains invalid content",
     })
-    .refine((msg) => msg.split("\n").length <= 7, {
+    .refine((msg) => msg.split("\n").length <= 5, {
       message: "Message is too big. write in short.",
     }),
 });
-
-module.exports = contactValidationSchema;
+const paragraph = (module.exports = contactValidationSchema);
