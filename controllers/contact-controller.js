@@ -4,12 +4,12 @@ const contactForm = async (req, res, next) => {
   try {
     const { username, email, message } = req.body;
 
-    const contactExist = await Contact.findOne({ email });
-    if (contactExist) {
-      return res
-        .status(400)
-        .json({ msg: "Contact with this email already exists" });
-    }
+    // const contactExist = await Contact.findOne({ email });
+    // if (contactExist) {
+    //   return res
+    //     .status(400)
+    //     .json({ msg: "Contact with this email already exists" });
+    // }
     await Contact.create({
       username,
       email,
