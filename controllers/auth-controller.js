@@ -1,6 +1,6 @@
-const { body, validationResult } = require("express-validator");
+// const { body, validationResult } = require("express-validator");
 const User = require("../models/user-model.js");
-const bcrypt = require("bcrypt");
+// const bcrypt = require("bcrypt");
 
 const home = async (req, res) => {
   try {
@@ -80,4 +80,14 @@ const login = async (req, res, next) => {
   }
 };
 
-module.exports = { home, register, login };
+const user = async (req, res) => {
+  try {
+    const userData = req.user;
+    // console.log(userData);
+    return res.status(200).json({ userData });
+  } catch (error) {
+    console.log(`Error from user route {error}`);
+  }
+};
+
+module.exports = { home, register, login, user };

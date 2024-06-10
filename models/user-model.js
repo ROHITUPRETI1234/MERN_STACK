@@ -34,10 +34,10 @@ userSchema.methods.generateToken = async function () {
       {
         userId: this._id.toString(), //by default _id is object type that's why converted to String
         email: this.email,
-        isAdmin: this.idAdmin,
+        isAdmin: this.isAdmin,
       },
       process.env.JWT_SECRET_kEY,
-      { expiresIn: "1h" }
+      { expiresIn: "30d" }
     ); //60x60 //20d
   } catch (error) {
     console.log(error);
