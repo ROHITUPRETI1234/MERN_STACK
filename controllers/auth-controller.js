@@ -6,7 +6,7 @@ const home = async (req, res) => {
   try {
     res.status(200).send("Full Stack Development");
   } catch (error) {
-    res.status(500).send({ msg: "Internal Server Error" });
+    res.status(500).send({ message: "Internal Server Error" });
   }
 };
 
@@ -17,7 +17,7 @@ const register = async (req, res, next) => {
 
     const userExist = await User.findOne({ email });
     if (userExist) {
-      return res.status(400).json({ msg: "User(email) already exists" });
+      return res.status(400).json({ message: "User(email) already exists" });
     }
 
     const userCreate = await User.create({
@@ -27,7 +27,7 @@ const register = async (req, res, next) => {
       password,
     });
     res.status(201).json({
-      msg: "User created successfully",
+      message: "User created successfully",
       token: await userCreate.generateToken(), // instance method defined in userSchema
       userId: userCreate._id.toString(),
     });
@@ -70,7 +70,7 @@ const login = async (req, res, next) => {
       next(err);
     } else {
       res.status(200).json({
-        msg: "User login successfully",
+        message: "User login successfully",
         token: await userExist.generateToken(),
         userId: userExist._id.toString(),
       });

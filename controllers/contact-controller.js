@@ -8,7 +8,7 @@ const contactForm = async (req, res, next) => {
     // if (contactExist) {
     //   return res
     //     .status(400)
-    //     .json({ msg: "Contact with this email already exists" });
+    //     .json({ message: "Contact with this email already exists" });
     // }
     await Contact.create({
       username,
@@ -17,7 +17,7 @@ const contactForm = async (req, res, next) => {
     });
     return res
       .status(201)
-      .json({ msg: "Form is filled successfully (message sent)" });
+      .json({ message: "Form is filled successfully (message sent)" });
   } catch (error) {
     const message = "Failed to save contact form data.";
     const err = { status: 500, message, extraDetails: error.message };

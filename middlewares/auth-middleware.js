@@ -19,7 +19,7 @@ const authMiddleware = async (req, res, next) => {
     const isVerified = jwt.verify(jwtToken, process.env.JWT_SECRET_kEY);
     // console.log(isVerified);
     if (!isVerified) {
-      res.status(400).json("Check secret key(Invalid Credential)");
+      res.status(400).json({ message: "Check secret key(Invalid Credential)" });
     }
     // getting the complete user details & also we don't want password to be sent
     const userData = await User.findOne({ email: isVerified.email }).select({
