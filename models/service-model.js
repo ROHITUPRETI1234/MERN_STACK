@@ -5,6 +5,7 @@ const serviceSchema = Schema({
   description: { type: String, required: true },
   price: { type: String, required: true },
   provider: { type: String, required: true },
+  imageUrl: { type: String, required: true }, //cloudinary url
 });
 
 const Service = model("Service", serviceSchema);
